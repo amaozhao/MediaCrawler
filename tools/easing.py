@@ -65,6 +65,6 @@ def get_tracks(distance, seconds, ease_func) -> Tuple[List[int], List[int]]:
     return offsets, tracks
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     o, tl = get_tracks(129, 3, "ease_out_expo")
     print(tl)

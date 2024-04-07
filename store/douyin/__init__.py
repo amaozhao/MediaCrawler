@@ -13,7 +13,7 @@ class DouyinStoreFactory:
     STORES = {
         "csv": DouyinCsvStoreImplement,
         "db": DouyinDbStoreImplement,
-        "json": DouyinJsonStoreImplement
+        "json": DouyinJsonStoreImplement,
     }
 
     @staticmethod
@@ -21,7 +21,8 @@ class DouyinStoreFactory:
         store_class = DouyinStoreFactory.STORES.get(config.SAVE_DATA_OPTION)
         if not store_class:
             raise ValueError(
-                "[DouyinStoreFactory.create_store] Invalid save option only supported csv or db or json ...")
+                "[DouyinStoreFactory.create_store] Invalid save option only supported csv or db or json ..."
+            )
         return store_class()
 
 
@@ -48,11 +49,14 @@ async def update_douyin_aweme(aweme_item: Dict):
         "share_count": str(interact_info.get("share_count")),
         "ip_location": aweme_item.get("ip_label", ""),
         "last_modify_ts": utils.get_current_timestamp(),
-        "aweme_url": f"https://www.douyin.com/video/{aweme_id}"
+        "aweme_url": f"https://www.douyin.com/video/{aweme_id}",
     }
     utils.logger.info(
-        f"[store.douyin.update_douyin_aweme] douyin aweme id:{aweme_id}, title:{save_content_item.get('title')}")
-    await DouyinStoreFactory.create_store().store_content(content_item=save_content_item)
+        f"[store.douyin.update_douyin_aweme] douyin aweme id:{aweme_id}, title:{save_content_item.get('title')}"
+    )
+    await DouyinStoreFactory.create_store().store_content(
+        content_item=save_content_item
+    )
 
 
 async def batch_update_dy_aweme_comments(aweme_id: str, comments: List[Dict]):
@@ -66,12 +70,18 @@ async def update_dy_aweme_comment(aweme_id: str, comment_item: Dict):
     comment_aweme_id = comment_item.get("aweme_id")
     if aweme_id != comment_aweme_id:
         utils.logger.error(
-            f"[store.douyin.update_dy_aweme_comment] comment_aweme_id: {comment_aweme_id} != aweme_id: {aweme_id}")
+            f"[store.douyin.update_dy_aweme_comment] comment_aweme_id: {comment_aweme_id} != aweme_id: {aweme_id}"
+        )
         return
     user_info = comment_item.get("user", {})
     comment_id = comment_item.get("cid")
-    avatar_info = user_info.get("avatar_medium", {}) or user_info.get("avatar_300x300", {}) or user_info.get(
-        "avatar_168x168", {}) or user_info.get("avatar_thumb", {}) or {}
+    avatar_info = (
+        user_info.get("avatar_medium", {})
+        or user_info.get("avatar_300x300", {})
+        or user_info.get("avatar_168x168", {})
+        or user_info.get("avatar_thumb", {})
+        or {}
+    )
     save_comment_item = {
         "comment_id": comment_id,
         "create_time": comment_item.get("create_time"),
@@ -89,6 +99,9 @@ async def update_dy_aweme_comment(aweme_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
     }
     utils.logger.info(
-        f"[store.douyin.update_dy_aweme_comment] douyin aweme comment: {comment_id}, content: {save_comment_item.get('content')}")
+        f"[store.douyin.update_dy_aweme_comment] douyin aweme comment: {comment_id}, content: {save_comment_item.get('content')}"
+    )
 
-    await DouyinStoreFactory.create_store().store_comment(comment_item=save_comment_item)
+    await DouyinStoreFactory.create_store().store_comment(
+        comment_item=save_comment_item
+    )

@@ -14,7 +14,7 @@ def extract_verification_code(message) -> str:
     """
     Extract verification code of 6 digits from the SMS.
     """
-    pattern = re.compile(r'\b[0-9]{6}\b')
+    pattern = re.compile(r"\b[0-9]{6}\b")
     codes: List[str] = pattern.findall(message)
     return codes[0] if codes and len(codes) > 0 else ""
 
@@ -54,7 +54,9 @@ class RecvSmsNotificationHandler(tornado.web.RequestHandler):
             # Save the verification code in Redis and set the expiration time to 3 minutes.
             # Use Redis string data structure, in the following format:
             # xhs_138xxxxxxxx -> 171959
-            key = f"{req_body_dict.get('platform')}_{req_body_dict.get('current_number')}"
+            key = (
+                f"{req_body_dict.get('platform')}_{req_body_dict.get('current_number')}"
+            )
             redis_obj.set(name=key, value=sms_code, ex=60 * 3)
         self.set_status(200)
         self.write("ok")
@@ -62,12 +64,8 @@ class RecvSmsNotificationHandler(tornado.web.RequestHandler):
 
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers = [(r'/', RecvSmsNotificationHandler)]
-        settings = dict(
-            gzip=True,
-            autoescape=None,
-            autoreload=True
-        )
+        handlers = [(r"/", RecvSmsNotificationHandler)]
+        settings = dict(gzip=True, autoescape=None, autoreload=True)
         super(Application, self).__init__(handlers, **settings)
 
 
@@ -79,7 +77,7 @@ async def main():
     await shutdown_event.wait()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:

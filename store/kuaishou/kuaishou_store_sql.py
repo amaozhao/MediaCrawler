@@ -51,9 +51,10 @@ async def update_content_by_content_id(content_id: str, content_item: Dict) -> i
 
     """
     async_db_conn: AsyncMysqlDB = media_crawler_db_var.get()
-    effect_row: int = await async_db_conn.update_table("kuaishou_video", content_item, "video_id", content_id)
+    effect_row: int = await async_db_conn.update_table(
+        "kuaishou_video", content_item, "video_id", content_id
+    )
     return effect_row
-
 
 
 async def query_comment_by_comment_id(comment_id: str) -> Dict:
@@ -83,7 +84,9 @@ async def add_new_comment(comment_item: Dict) -> int:
 
     """
     async_db_conn: AsyncMysqlDB = media_crawler_db_var.get()
-    last_row_id: int = await async_db_conn.item_to_table("kuaishou_video_comment", comment_item)
+    last_row_id: int = await async_db_conn.item_to_table(
+        "kuaishou_video_comment", comment_item
+    )
     return last_row_id
 
 
@@ -98,5 +101,7 @@ async def update_comment_by_comment_id(comment_id: str, comment_item: Dict) -> i
 
     """
     async_db_conn: AsyncMysqlDB = media_crawler_db_var.get()
-    effect_row: int = await async_db_conn.update_table("kuaishou_video_comment", comment_item, "comment_id", comment_id)
+    effect_row: int = await async_db_conn.update_table(
+        "kuaishou_video_comment", comment_item, "comment_id", comment_id
+    )
     return effect_row

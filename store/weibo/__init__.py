@@ -14,7 +14,7 @@ class WeibostoreFactory:
     STORES = {
         "csv": WeiboCsvStoreImplement,
         "db": WeiboDbStoreImplement,
-        "json": WeiboJsonStoreImplement
+        "json": WeiboJsonStoreImplement,
     }
 
     @staticmethod
@@ -22,7 +22,8 @@ class WeibostoreFactory:
         store_class = WeibostoreFactory.STORES.get(config.SAVE_DATA_OPTION)
         if not store_class:
             raise ValueError(
-                "[WeibotoreFactory.create_store] Invalid save option only supported csv or db or json ...")
+                "[WeibotoreFactory.create_store] Invalid save option only supported csv or db or json ..."
+            )
         return store_class()
 
 
@@ -35,14 +36,15 @@ async def update_weibo_note(note_item: Dict):
         "note_id": note_id,
         "content": mblog.get("text"),
         "create_time": utils.rfc2822_to_timestamp(mblog.get("created_at")),
-        "create_date_time": str(utils.rfc2822_to_china_datetime(mblog.get("created_at"))),
+        "create_date_time": str(
+            utils.rfc2822_to_china_datetime(mblog.get("created_at"))
+        ),
         "liked_count": str(mblog.get("attitudes_count", 0)),
         "comments_count": str(mblog.get("comments_count", 0)),
         "shared_count": str(mblog.get("reposts_count", 0)),
         "last_modify_ts": utils.get_current_timestamp(),
         "note_url": f"https://m.weibo.cn/detail/{note_id}",
         "ip_location": mblog.get("region_name", "").replace("发布于 ", ""),
-
         # 用户信息
         "user_id": str(user_info.get("id")),
         "nickname": user_info.get("screen_name", ""),
@@ -51,7 +53,8 @@ async def update_weibo_note(note_item: Dict):
         "avatar": user_info.get("profile_image_url", ""),
     }
     utils.logger.info(
-        f"[store.weibo.update_weibo_note] weibo note id:{note_id}, title:{save_content_item.get('content')[:24]} ...")
+        f"[store.weibo.update_weibo_note] weibo note id:{note_id}, title:{save_content_item.get('content')[:24]} ..."
+    )
     await WeibostoreFactory.create_store().store_content(content_item=save_content_item)
 
 
@@ -68,14 +71,15 @@ async def update_weibo_note_comment(note_id: str, comment_item: Dict):
     save_comment_item = {
         "comment_id": comment_id,
         "create_time": utils.rfc2822_to_timestamp(comment_item.get("created_at")),
-        "create_date_time": str(utils.rfc2822_to_china_datetime(comment_item.get("created_at"))),
+        "create_date_time": str(
+            utils.rfc2822_to_china_datetime(comment_item.get("created_at"))
+        ),
         "note_id": note_id,
         "content": comment_item.get("text"),
         "sub_comment_count": str(comment_item.get("total_number", 0)),
         "comment_like_count": str(comment_item.get("like_count", 0)),
         "last_modify_ts": utils.get_current_timestamp(),
         "ip_location": comment_item.get("source", "").replace("来自", ""),
-
         # 用户信息
         "user_id": str(user_info.get("id")),
         "nickname": user_info.get("screen_name", ""),
@@ -84,5 +88,6 @@ async def update_weibo_note_comment(note_id: str, comment_item: Dict):
         "avatar": user_info.get("profile_image_url", ""),
     }
     utils.logger.info(
-        f"[store.weibo.update_weibo_note_comment] Weibo note comment: {comment_id}, content: {save_comment_item.get('content', '')[:24]} ...")
+        f"[store.weibo.update_weibo_note_comment] Weibo note comment: {comment_id}, content: {save_comment_item.get('content', '')[:24]} ..."
+    )
     await WeibostoreFactory.create_store().store_comment(comment_item=save_comment_item)

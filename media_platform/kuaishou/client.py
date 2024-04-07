@@ -17,13 +17,13 @@ from .graphql import KuaiShouGraphQL
 
 class KuaiShouClient(AbstactApiClient):
     def __init__(
-            self,
-            timeout=10,
-            proxies=None,
-            *,
-            headers: Dict[str, str],
-            playwright_page: Page,
-            cookie_dict: Dict[str, str],
+        self,
+        timeout=10,
+        proxies=None,
+        *,
+        headers: Dict[str, str],
+        playwright_page: Page,
+        cookie_dict: Dict[str, str],
     ):
         self.proxies = proxies
         self.timeout = timeout
@@ -35,10 +35,7 @@ class KuaiShouClient(AbstactApiClient):
 
     async def request(self, method, url, **kwargs) -> Any:
         async with httpx.AsyncClient(proxies=self.proxies) as client:
-            response = await client.request(
-                method, url, timeout=self.timeout,
-                **kwargs
-            )
+            response = await client.request(method, url, timeout=self.timeout, **kwargs)
         data: Dict = response.json()
         if data.get("errors"):
             raise DataFetchError(data.get("errors", "unkonw error"))
@@ -48,14 +45,16 @@ class KuaiShouClient(AbstactApiClient):
     async def get(self, uri: str, params=None) -> Dict:
         final_uri = uri
         if isinstance(params, dict):
-            final_uri = (f"{uri}?"
-                         f"{urlencode(params)}")
-        return await self.request(method="GET", url=f"{self._host}{final_uri}", headers=self.headers)
+            final_uri = f"{uri}?" f"{urlencode(params)}"
+        return await self.request(
+            method="GET", url=f"{self._host}{final_uri}", headers=self.headers
+        )
 
     async def post(self, uri: str, data: dict) -> Dict:
-        json_str = json.dumps(data, separators=(',', ':'), ensure_ascii=False)
-        return await self.request(method="POST", url=f"{self._host}{uri}",
-                                  data=json_str, headers=self.headers)
+        json_str = json.dumps(data, separators=(",", ":"), ensure_ascii=False)
+        return await self.request(
+            method="POST", url=f"{self._host}{uri}", data=json_str, headers=self.headers
+        )
 
     async def pong(self) -> bool:
         """get a note to check if login state is ok"""
@@ -67,13 +66,15 @@ class KuaiShouClient(AbstactApiClient):
                 "variables": {
                     "ftype": 1,
                 },
-                "query": self.graphql.get("vision_profile")
+                "query": self.graphql.get("vision_profile"),
             }
             res = await self.post("", post_data)
             if res.get("visionProfileUserList", {}).get("result") == 1:
                 ping_flag = True
         except Exception as e:
-            utils.logger.error(f"[KuaiShouClient.pong] Pong kuaishou failed: {e}, and try to login again...")
+            utils.logger.error(
+                f"[KuaiShouClient.pong] Pong kuaishou failed: {e}, and try to login again..."
+            )
             ping_flag = False
         return ping_flag
 
@@ -91,12 +92,8 @@ class KuaiShouClient(AbstactApiClient):
         """
         post_data = {
             "operationName": "visionSearchPhoto",
-            "variables": {
-                "keyword": keyword,
-                "pcursor": pcursor,
-                "page": "search"
-            },
-            "query": self.graphql.get("search_query")
+            "variables": {"keyword": keyword, "pcursor": pcursor, "page": "search"},
+            "query": self.graphql.get("search_query"),
         }
         return await self.post("", post_data)
 
@@ -108,11 +105,8 @@ class KuaiShouClient(AbstactApiClient):
         """
         post_data = {
             "operationName": "visionVideoDetail",
-            "variables": {
-                "photoId": photo_id,
-                "page": "search"
-            },
-            "query": self.graphql.get("video_detail")
+            "variables": {"photoId": photo_id, "page": "search"},
+            "query": self.graphql.get("video_detail"),
         }
         return await self.post("", post_data)
 
@@ -124,17 +118,18 @@ class KuaiShouClient(AbstactApiClient):
         """
         post_data = {
             "operationName": "commentListQuery",
-            "variables": {
-                "photoId": photo_id,
-                "pcursor": pcursor
-            },
-            "query": self.graphql.get("comment_list")
-
+            "variables": {"photoId": photo_id, "pcursor": pcursor},
+            "query": self.graphql.get("comment_list"),
         }
         return await self.post("", post_data)
 
-    async def get_video_all_comments(self, photo_id: str, crawl_interval: float = 1.0, is_fetch_sub_comments=False,
-                                     callback: Optional[Callable] = None):
+    async def get_video_all_comments(
+        self,
+        photo_id: str,
+        crawl_interval: float = 1.0,
+        is_fetch_sub_comments=False,
+        callback: Optional[Callable] = None,
+    ):
         """
         get video all comments include sub comments
         :param photo_id:

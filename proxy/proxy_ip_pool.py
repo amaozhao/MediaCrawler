@@ -17,7 +17,9 @@ from .types import IpInfoModel, ProviderNameEnum
 
 
 class ProxyIpPool:
-    def __init__(self, ip_pool_count: int, enable_validate_ip: bool, ip_provider: ProxyProvider) -> None:
+    def __init__(
+        self, ip_pool_count: int, enable_validate_ip: bool, ip_provider: ProxyProvider
+    ) -> None:
         """
 
         Args:
@@ -45,7 +47,9 @@ class ProxyIpPool:
         :param proxy:
         :return:
         """
-        utils.logger.info(f"[ProxyIpPool._is_valid_proxy] testing {proxy.ip} is it valid ")
+        utils.logger.info(
+            f"[ProxyIpPool._is_valid_proxy] testing {proxy.ip} is it valid "
+        )
         try:
             httpx_proxy = {
                 f"{proxy.protocol}": f"http://{proxy.user}:{proxy.password}@{proxy.ip}:{proxy.port}"
@@ -57,7 +61,9 @@ class ProxyIpPool:
             else:
                 return False
         except Exception as e:
-            utils.logger.info(f"[ProxyIpPool._is_valid_proxy] testing {proxy.ip} err: {e}")
+            utils.logger.info(
+                f"[ProxyIpPool._is_valid_proxy] testing {proxy.ip} err: {e}"
+            )
             raise e
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
@@ -72,7 +78,9 @@ class ProxyIpPool:
         proxy = random.choice(self.proxy_list)
         if self.enable_validate_ip:
             if not await self._is_valid_proxy(proxy):
-                raise Exception("[ProxyIpPool.get_proxy] current ip invalid and again get it")
+                raise Exception(
+                    "[ProxyIpPool.get_proxy] current ip invalid and again get it"
+                )
         self.proxy_list.remove(proxy)
         return proxy
 
@@ -87,7 +95,7 @@ class ProxyIpPool:
 
 IpProxyProvider: Dict[str, ProxyProvider] = {
     ProviderNameEnum.JISHU_HTTP_PROVIDER.value: new_jisu_http_proxy(),
-    ProviderNameEnum.KUAI_DAILI_PROVIDER.value: new_kuai_daili_proxy()
+    ProviderNameEnum.KUAI_DAILI_PROVIDER.value: new_kuai_daili_proxy(),
 }
 
 
@@ -98,13 +106,14 @@ async def create_ip_pool(ip_pool_count: int, enable_validate_ip: bool) -> ProxyI
     :param enable_validate_ip: 是否开启验证IP代理
     :return:
     """
-    pool = ProxyIpPool(ip_pool_count=ip_pool_count,
-                       enable_validate_ip=enable_validate_ip,
-                       ip_provider=IpProxyProvider.get(config.IP_PROXY_PROVIDER_NAME)
-                       )
+    pool = ProxyIpPool(
+        ip_pool_count=ip_pool_count,
+        enable_validate_ip=enable_validate_ip,
+        ip_provider=IpProxyProvider.get(config.IP_PROXY_PROVIDER_NAME),
+    )
     await pool.load_proxies()
     return pool
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

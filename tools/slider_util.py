@@ -16,27 +16,28 @@ class Slide:
     copy from https://blog.csdn.net/weixin_43582101 thanks for author
     update: relakkes
     """
+
     def __init__(self, gap, bg, gap_size=None, bg_size=None, out=None):
         """
         :param gap: 缺口图片链接或者url
         :param bg: 带缺口的图片链接或者url
         """
-        self.img_dir = os.path.join(os.getcwd(), 'temp_image')
+        self.img_dir = os.path.join(os.getcwd(), "temp_image")
         if not os.path.exists(self.img_dir):
             os.makedirs(self.img_dir)
 
         bg_resize = bg_size if bg_size else (340, 212)
         gap_size = gap_size if gap_size else (68, 68)
-        self.bg = self.check_is_img_path(bg, 'bg', resize=bg_resize)
-        self.gap = self.check_is_img_path(gap, 'gap', resize=gap_size)
-        self.out = out if out else os.path.join(self.img_dir, 'out.jpg')
+        self.bg = self.check_is_img_path(bg, "bg", resize=bg_resize)
+        self.gap = self.check_is_img_path(gap, "gap", resize=gap_size)
+        self.out = out if out else os.path.join(self.img_dir, "out.jpg")
 
     @staticmethod
     def check_is_img_path(img, img_type, resize):
-        if img.startswith('http'):
+        if img.startswith("http"):
             headers = {
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;"
-                          "q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "q=0.8,application/signed-exchange;v=b3;q=0.9",
                 "Accept-Encoding": "gzip, deflate, br",
                 "Accept-Language": "zh-CN,zh;q=0.9,en-GB;q=0.8,en;q=0.7,ja;q=0.6",
                 "Cache-Control": "max-age=0",
@@ -44,11 +45,11 @@ class Slide:
                 "Host": urlparse(img).hostname,
                 "Upgrade-Insecure-Requests": "1",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                              "Chrome/91.0.4472.164 Safari/537.36",
+                "Chrome/91.0.4472.164 Safari/537.36",
             }
             img_res = httpx.get(img, headers=headers)
             if img_res.status_code == 200:
-                img_path = f'./temp_image/{img_type}.jpg'
+                img_path = f"./temp_image/{img_type}.jpg"
                 image = np.asarray(bytearray(img_res.content), dtype="uint8")
                 image = cv2.imdecode(image, cv2.IMREAD_COLOR)
                 if resize:
@@ -82,7 +83,7 @@ class Slide:
                         min_y = y
                     elif y >= max_y:
                         max_y = y
-        img1 = img[min_x:max_x, min_y: max_y]
+        img1 = img[min_x:max_x, min_y:max_y]
         return img1
 
     def template_match(self, tpl, target):
@@ -160,5 +161,6 @@ def get_tracks(distance: int, level: str = "easy") -> List[int]:
         return get_track_simple(distance)
     else:
         from . import easing
+
         _, tricks = easing.get_tracks(distance, seconds=2, ease_func="ease_out_expo")
         return tricks

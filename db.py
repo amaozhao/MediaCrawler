@@ -25,11 +25,11 @@ def parse_mysql_url(mysql_url) -> Dict:
     """
     parsed_url = urlparse(mysql_url)
     db_params = {
-        'host': parsed_url.hostname,
-        'port': parsed_url.port or 3306,
-        'user': parsed_url.username,
-        'password': parsed_url.password,
-        'db': parsed_url.path.lstrip('/')
+        "host": parsed_url.hostname,
+        "port": parsed_url.port or 3306,
+        "user": parsed_url.username,
+        "password": parsed_url.password,
+        "db": parsed_url.path.lstrip("/"),
     }
     return db_params
 
@@ -41,10 +41,7 @@ async def init_mediacrawler_db():
 
     """
     db_conn_params = parse_mysql_url(config.RELATION_DB_URL)
-    pool = await aiomysql.create_pool(
-        autocommit=True,
-        **db_conn_params
-    )
+    pool = await aiomysql.create_pool(autocommit=True, **db_conn_params)
     async_db_obj = AsyncMysqlDB(pool)
 
     # 将连接池对象和封装的CRUD sql接口对象放到上下文变量中
@@ -62,6 +59,7 @@ async def init_db():
     await init_mediacrawler_db()
     utils.logger.info("[init_db] end init mediacrawler db connect object")
 
+
 async def close():
     """
     关闭连接池
@@ -74,5 +72,5 @@ async def close():
         db_pool.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(init_db())

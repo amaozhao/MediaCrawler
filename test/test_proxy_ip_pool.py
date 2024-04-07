@@ -16,4 +16,3 @@ class TestIpPool(IsolatedAsyncioTestCase):
             ip_proxy_info: IpInfoModel = await pool.get_proxy()
             print(ip_proxy_info)
             self.assertIsNotNone(ip_proxy_info.ip, msg="验证 ip 是否获取成功")
-

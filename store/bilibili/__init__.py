@@ -14,7 +14,7 @@ class BiliStoreFactory:
     STORES = {
         "csv": BiliCsvStoreImplement,
         "db": BiliDbStoreImplement,
-        "json": BiliJsonStoreImplement
+        "json": BiliJsonStoreImplement,
     }
 
     @staticmethod
@@ -22,7 +22,8 @@ class BiliStoreFactory:
         store_class = BiliStoreFactory.STORES.get(config.SAVE_DATA_OPTION)
         if not store_class:
             raise ValueError(
-                "[BiliStoreFactory.create_store] Invalid save option only supported csv or db or json ...")
+                "[BiliStoreFactory.create_store] Invalid save option only supported csv or db or json ..."
+            )
         return store_class()
 
 
@@ -49,7 +50,8 @@ async def update_bilibili_video(video_item: Dict):
         "video_cover_url": video_item_view.get("pic", ""),
     }
     utils.logger.info(
-        f"[store.bilibili.update_bilibili_video] bilibili video id:{video_id}, title:{save_content_item.get('title')}")
+        f"[store.bilibili.update_bilibili_video] bilibili video id:{video_id}, title:{save_content_item.get('title')}"
+    )
     await BiliStoreFactory.create_store().store_content(content_item=save_content_item)
 
 
@@ -76,5 +78,6 @@ async def update_bilibili_video_comment(video_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
     }
     utils.logger.info(
-        f"[store.bilibili.update_bilibili_video_comment] Bilibili video comment: {comment_id}, content: {save_comment_item.get('content')}")
+        f"[store.bilibili.update_bilibili_video_comment] Bilibili video comment: {comment_id}, content: {save_comment_item.get('content')}"
+    )
     await BiliStoreFactory.create_store().store_comment(comment_item=save_comment_item)

@@ -13,7 +13,7 @@ class KuaishouStoreFactory:
     STORES = {
         "csv": KuaishouCsvStoreImplement,
         "db": KuaishouDbStoreImplement,
-        "json": KuaishouJsonStoreImplement
+        "json": KuaishouJsonStoreImplement,
     }
 
     @staticmethod
@@ -21,7 +21,8 @@ class KuaishouStoreFactory:
         store_class = KuaishouStoreFactory.STORES.get(config.SAVE_DATA_OPTION)
         if not store_class:
             raise ValueError(
-                "[KuaishouStoreFactory.create_store] Invalid save option only supported csv or db or json ...")
+                "[KuaishouStoreFactory.create_store] Invalid save option only supported csv or db or json ..."
+            )
         return store_class()
 
 
@@ -48,12 +49,17 @@ async def update_kuaishou_video(video_item: Dict):
         "video_play_url": photo_info.get("photoUrl", ""),
     }
     utils.logger.info(
-        f"[store.kuaishou.update_kuaishou_video] Kuaishou video id:{video_id}, title:{save_content_item.get('title')}")
-    await KuaishouStoreFactory.create_store().store_content(content_item=save_content_item)
+        f"[store.kuaishou.update_kuaishou_video] Kuaishou video id:{video_id}, title:{save_content_item.get('title')}"
+    )
+    await KuaishouStoreFactory.create_store().store_content(
+        content_item=save_content_item
+    )
 
 
 async def batch_update_ks_video_comments(video_id: str, comments: List[Dict]):
-    utils.logger.info(f"[store.kuaishou.batch_update_ks_video_comments] video_id:{video_id}, comments:{comments}")
+    utils.logger.info(
+        f"[store.kuaishou.batch_update_ks_video_comments] video_id:{video_id}, comments:{comments}"
+    )
     if not comments:
         return
     for comment_item in comments:
@@ -74,5 +80,8 @@ async def update_ks_video_comment(video_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
     }
     utils.logger.info(
-        f"[store.kuaishou.update_ks_video_comment] Kuaishou video comment: {comment_id}, content: {save_comment_item.get('content')}")
-    await KuaishouStoreFactory.create_store().store_comment(comment_item=save_comment_item)
+        f"[store.kuaishou.update_ks_video_comment] Kuaishou video comment: {comment_id}, content: {save_comment_item.get('content')}"
+    )
+    await KuaishouStoreFactory.create_store().store_comment(
+        comment_item=save_comment_item
+    )

@@ -4,14 +4,19 @@ from typing import Dict
 
 
 class KuaiShouGraphQL:
-    graphql_queries: Dict[str, str]= {}
+    graphql_queries: Dict[str, str] = {}
 
     def __init__(self):
         self.graphql_dir = "media_platform/kuaishou/graphql/"
         self.load_graphql_queries()
 
     def load_graphql_queries(self):
-        graphql_files = ["search_query.graphql", "video_detail.graphql", "comment_list.graphql", "vision_profile.graphql"]
+        graphql_files = [
+            "search_query.graphql",
+            "video_detail.graphql",
+            "comment_list.graphql",
+            "vision_profile.graphql",
+        ]
 
         for file in graphql_files:
             with open(self.graphql_dir + file, mode="r") as f:

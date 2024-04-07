@@ -20,7 +20,7 @@ def get_current_time() -> str:
     获取当前的时间：'2023-12-02 13:01:23'
     :return:
     """
-    return time.strftime('%Y-%m-%d %X', time.localtime())
+    return time.strftime("%Y-%m-%d %X", time.localtime())
 
 
 def get_current_date() -> str:
@@ -28,7 +28,7 @@ def get_current_date() -> str:
     获取当前的日期：'2023-12-02'
     :return:
     """
-    return time.strftime('%Y-%m-%d', time.localtime())
+    return time.strftime("%Y-%m-%d", time.localtime())
 
 
 def get_time_str_from_unix_time(unixtime):
@@ -39,7 +39,7 @@ def get_time_str_from_unix_time(unixtime):
     """
     if int(unixtime) > 1000000000000:
         unixtime = int(unixtime) / 1000
-    return time.strftime('%Y-%m-%d %X', time.localtime(unixtime))
+    return time.strftime("%Y-%m-%d %X", time.localtime(unixtime))
 
 
 def get_date_str_from_unix_time(unixtime):
@@ -50,7 +50,7 @@ def get_date_str_from_unix_time(unixtime):
     """
     if int(unixtime) > 1000000000000:
         unixtime = int(unixtime) / 1000
-    return time.strftime('%Y-%m-%d', time.localtime(unixtime))
+    return time.strftime("%Y-%m-%d", time.localtime(unixtime))
 
 
 def get_unix_time_from_time_str(time_str):
@@ -100,7 +100,7 @@ def rfc2822_to_timestamp(rfc2822_time):
     return timestamp
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # 示例用法
     _rfc2822_time = "Sat Dec 23 17:12:54 +0800 2023"
     print(rfc2822_to_china_datetime(_rfc2822_time))

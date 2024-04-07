@@ -34,6 +34,7 @@ class NoteType(Enum):
 
 class SearchSortType(Enum):
     """search sort type"""
+
     # default
     GENERAL = "general"
     # most popular
@@ -43,8 +44,8 @@ class SearchSortType(Enum):
 
 
 class SearchNoteType(Enum):
-    """search note type
-    """
+    """search note type"""
+
     # default
     ALL = 0
     # only video
@@ -55,6 +56,7 @@ class SearchNoteType(Enum):
 
 class Note(NamedTuple):
     """note tuple"""
+
     note_id: str
     title: str
     desc: str

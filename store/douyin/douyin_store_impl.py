@@ -42,7 +42,9 @@ class DouyinCsvStoreImplement(AbstractStore):
         """
         pathlib.Path(self.csv_store_path).mkdir(parents=True, exist_ok=True)
         save_file_name = self.make_save_file_name(store_type=store_type)
-        async with aiofiles.open(save_file_name, mode='a+', encoding="utf-8-sig", newline="") as f:
+        async with aiofiles.open(
+            save_file_name, mode="a+", encoding="utf-8-sig", newline=""
+        ) as f:
             writer = csv.writer(f)
             if await f.tell() == 0:
                 await writer.writerow(save_item.keys())
@@ -82,9 +84,12 @@ class DouyinDbStoreImplement(AbstractStore):
 
         """
 
-        from .douyin_store_sql import (add_new_content,
-                                       query_content_by_content_id,
-                                       update_content_by_content_id)
+        from .douyin_store_sql import (
+            add_new_content,
+            query_content_by_content_id,
+            update_content_by_content_id,
+        )
+
         aweme_id = content_item.get("aweme_id")
         aweme_detail: Dict = await query_content_by_content_id(content_id=aweme_id)
         if not aweme_detail:
@@ -93,7 +98,6 @@ class DouyinDbStoreImplement(AbstractStore):
                 await add_new_content(content_item)
         else:
             await update_content_by_content_id(aweme_id, content_item=content_item)
-
 
     async def store_comment(self, comment_item: Dict):
         """
@@ -104,9 +108,12 @@ class DouyinDbStoreImplement(AbstractStore):
         Returns:
 
         """
-        from .douyin_store_sql import (add_new_comment,
-                                       query_comment_by_comment_id,
-                                       update_comment_by_comment_id)
+        from .douyin_store_sql import (
+            add_new_comment,
+            query_comment_by_comment_id,
+            update_comment_by_comment_id,
+        )
+
         comment_id = comment_item.get("comment_id")
         comment_detail: Dict = await query_comment_by_comment_id(comment_id=comment_id)
         if not comment_detail:
@@ -147,11 +154,11 @@ class DouyinJsonStoreImplement(AbstractStore):
 
         async with self.lock:
             if os.path.exists(save_file_name):
-                async with aiofiles.open(save_file_name, 'r', encoding='utf-8') as file:
+                async with aiofiles.open(save_file_name, "r", encoding="utf-8") as file:
                     save_data = json.loads(await file.read())
 
             save_data.append(save_item)
-            async with aiofiles.open(save_file_name, 'w', encoding='utf-8') as file:
+            async with aiofiles.open(save_file_name, "w", encoding="utf-8") as file:
                 await file.write(json.dumps(save_data, ensure_ascii=False))
 
     async def store_content(self, content_item: Dict):

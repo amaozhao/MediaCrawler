@@ -1,4 +1,4 @@
-    # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # @Author  : relakkes@gmail.com
 # @Time    : 2023/12/2 23:26
 # @Desc    : bilibili 请求参数签名
@@ -15,10 +15,70 @@ class BilibiliSign:
         self.img_key = img_key
         self.sub_key = sub_key
         self.map_table = [
-            46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35, 27, 43, 5, 49,
-            33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40,
-            61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11,
-            36, 20, 34, 44, 52
+            46,
+            47,
+            18,
+            2,
+            53,
+            8,
+            23,
+            32,
+            15,
+            50,
+            10,
+            31,
+            58,
+            3,
+            45,
+            35,
+            27,
+            43,
+            5,
+            49,
+            33,
+            9,
+            42,
+            19,
+            29,
+            28,
+            14,
+            39,
+            12,
+            38,
+            41,
+            13,
+            37,
+            48,
+            7,
+            16,
+            24,
+            55,
+            40,
+            61,
+            26,
+            17,
+            0,
+            1,
+            60,
+            51,
+            30,
+            4,
+            22,
+            25,
+            54,
+            21,
+            56,
+            59,
+            6,
+            63,
+            57,
+            62,
+            11,
+            36,
+            20,
+            34,
+            44,
+            52,
         ]
 
     def get_salt(self) -> str:
@@ -44,18 +104,17 @@ class BilibiliSign:
         req_data = dict(sorted(req_data.items()))
         req_data = {
             # 过滤 value 中的 "!'()*" 字符
-            k: ''.join(filter(lambda ch: ch not in "!'()*", str(v)))
-            for k, v
-            in req_data.items()
+            k: "".join(filter(lambda ch: ch not in "!'()*", str(v)))
+            for k, v in req_data.items()
         }
         query = urllib.parse.urlencode(req_data)
         salt = self.get_salt()
         wbi_sign = md5((query + salt).encode()).hexdigest()  # 计算 w_rid
-        req_data['w_rid'] = wbi_sign
+        req_data["w_rid"] = wbi_sign
         return req_data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     _img_key = "7cd084941338484aae1ad9425b84077c"
     _sub_key = "4932caff0ff746eab6f01bf08b70ac45"
     _search_url = "__refresh__=true&_extra=&ad_resource=5654&category_id=&context=&dynamic_offset=0&from_source=&from_spmid=333.337&gaia_vtoken=&highlight=1&keyword=python&order=click&page=1&page_size=20&platform=pc&qv_id=OQ8f2qtgYdBV1UoEnqXUNUl8LEDAdzsD&search_type=video&single_column=0&source_tag=3&web_location=1430654"
@@ -66,5 +125,7 @@ if __name__ == '__main__':
         value = kvalues[1]
         _req_data[key] = value
     print("pre req_data", _req_data)
-    _req_data = BilibiliSign(img_key=_img_key, sub_key=_sub_key).sign(req_data={"aid":170001})
+    _req_data = BilibiliSign(img_key=_img_key, sub_key=_sub_key).sign(
+        req_data={"aid": 170001}
+    )
     print(_req_data)

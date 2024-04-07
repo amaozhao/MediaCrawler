@@ -17,13 +17,13 @@ from .field import *
 
 class DOUYINClient(AbstactApiClient):
     def __init__(
-            self,
-            timeout=30,
-            proxies=None,
-            *,
-            headers: Dict,
-            playwright_page: Optional[Page],
-            cookie_dict: Dict
+        self,
+        timeout=30,
+        proxies=None,
+        *,
+        headers: Dict,
+        playwright_page: Optional[Page],
+        cookie_dict: Dict,
     ):
         self.proxies = proxies
         self.timeout = timeout
@@ -32,12 +32,14 @@ class DOUYINClient(AbstactApiClient):
         self.playwright_page = playwright_page
         self.cookie_dict = cookie_dict
 
-    async def __process_req_params(self, params: Optional[Dict] = None, headers: Optional[Dict] = None):
+    async def __process_req_params(
+        self, params: Optional[Dict] = None, headers: Optional[Dict] = None
+    ):
         if not params:
             return
         headers = headers or self.headers
         local_storage: Dict = await self.playwright_page.evaluate("() => window.localStorage")  # type: ignore
-        douyin_js_obj = execjs.compile(open('libs/douyin.js').read())
+        douyin_js_obj = execjs.compile(open("libs/douyin.js").read())
         common_params = {
             "device_platform": "webapp",
             "aid": "6383",
@@ -60,31 +62,34 @@ class DOUYINClient(AbstactApiClient):
             # "msToken": "abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK",
         }
         params.update(common_params)
-        query = '&'.join([f'{k}={v}' for k, v in params.items()])
-        x_bogus = douyin_js_obj.call('sign', query, headers["User-Agent"])
+        query = "&".join([f"{k}={v}" for k, v in params.items()])
+        x_bogus = douyin_js_obj.call("sign", query, headers["User-Agent"])
         params["X-Bogus"] = x_bogus
         # print(x_bogus, query)
 
     async def request(self, method, url, **kwargs):
         async with httpx.AsyncClient(proxies=self.proxies) as client:
-            response = await client.request(
-                method, url, timeout=self.timeout,
-                **kwargs
-            )
+            response = await client.request(method, url, timeout=self.timeout, **kwargs)
             try:
                 return response.json()
             except Exception as e:
                 raise DataFetchError(f"{e}, {response.text}")
 
-    async def get(self, uri: str, params: Optional[Dict] = None, headers: Optional[Dict] = None):
+    async def get(
+        self, uri: str, params: Optional[Dict] = None, headers: Optional[Dict] = None
+    ):
         await self.__process_req_params(params, headers)
         headers = headers or self.headers
-        return await self.request(method="GET", url=f"{self._host}{uri}", params=params, headers=headers)
+        return await self.request(
+            method="GET", url=f"{self._host}{uri}", params=params, headers=headers
+        )
 
     async def post(self, uri: str, data: dict, headers: Optional[Dict] = None):
         await self.__process_req_params(data, headers)
         headers = headers or self.headers
-        return await self.request(method="POST", url=f"{self._host}{uri}", data=data, headers=headers)
+        return await self.request(
+            method="POST", url=f"{self._host}{uri}", data=data, headers=headers
+        )
 
     @staticmethod
     async def pong(browser_context: BrowserContext) -> bool:
@@ -98,12 +103,12 @@ class DOUYINClient(AbstactApiClient):
         self.cookie_dict = cookie_dict
 
     async def search_info_by_keyword(
-            self,
-            keyword: str,
-            offset: int = 0,
-            search_channel: SearchChannelType = SearchChannelType.GENERAL,
-            sort_type: SearchSortType = SearchSortType.GENERAL,
-            publish_time: PublishTimeType = PublishTimeType.UNLIMITED
+        self,
+        keyword: str,
+        offset: int = 0,
+        search_channel: SearchChannelType = SearchChannelType.GENERAL,
+        sort_type: SearchSortType = SearchSortType.GENERAL,
+        publish_time: PublishTimeType = PublishTimeType.UNLIMITED,
     ):
         """
         DouYin Web Search API
@@ -123,13 +128,15 @@ class DOUYINClient(AbstactApiClient):
             "query_correct_type": "1",
             "is_filter_search": "0",
             "offset": offset,
-            "count": 10  # must be set to 10
+            "count": 10,  # must be set to 10
         }
         referer_url = "https://www.douyin.com/search/" + keyword
         referer_url += f"?publish_time={publish_time.value}&sort_type={sort_type.value}&type=general"
         headers = copy.copy(self.headers)
-        headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
-        return await self.get("/aweme/v1/web/general/search/single/", params, headers=headers)
+        headers["Referer"] = urllib.parse.quote(referer_url, safe=":/")
+        return await self.get(
+            "/aweme/v1/web/general/search/single/", params, headers=headers
+        )
 
     async def get_video_by_id(self, aweme_id: str) -> Any:
         """
@@ -137,9 +144,7 @@ class DOUYINClient(AbstactApiClient):
         :param aweme_id:
         :return:
         """
-        params = {
-            "aweme_id": aweme_id
-        }
+        params = {"aweme_id": aweme_id}
         headers = copy.copy(self.headers)
         # headers["Cookie"] = "s_v_web_id=verify_lol4a8dv_wpQ1QMyP_xemd_4wON_8Yzr_FJa8DN1vdY2m;"
         del headers["Origin"]
@@ -147,28 +152,25 @@ class DOUYINClient(AbstactApiClient):
         return res.get("aweme_detail", {})
 
     async def get_aweme_comments(self, aweme_id: str, cursor: int = 0):
-        """get note comments
-
-        """
+        """get note comments"""
         uri = "/aweme/v1/web/comment/list/"
-        params = {
-            "aweme_id": aweme_id,
-            "cursor": cursor,
-            "count": 20,
-            "item_type": 0
-        }
+        params = {"aweme_id": aweme_id, "cursor": cursor, "count": 20, "item_type": 0}
         keywords = request_keyword_var.get()
-        referer_url = "https://www.douyin.com/search/" + keywords + '?aid=3a3cec5a-9e27-4040-b6aa-ef548c2c1138&publish_time=0&sort_type=0&source=search_history&type=general'
+        referer_url = (
+            "https://www.douyin.com/search/"
+            + keywords
+            + "?aid=3a3cec5a-9e27-4040-b6aa-ef548c2c1138&publish_time=0&sort_type=0&source=search_history&type=general"
+        )
         headers = copy.copy(self.headers)
-        headers["Referer"] = urllib.parse.quote(referer_url, safe=':/')
+        headers["Referer"] = urllib.parse.quote(referer_url, safe=":/")
         return await self.get(uri, params)
 
     async def get_aweme_all_comments(
-            self,
-            aweme_id: str,
-            crawl_interval: float = 1.0,
-            is_fetch_sub_comments=False,
-            callback: Optional[Callable] = None,
+        self,
+        aweme_id: str,
+        crawl_interval: float = 1.0,
+        is_fetch_sub_comments=False,
+        callback: Optional[Callable] = None,
     ):
         """
         获取帖子的所有评论，包括子评论

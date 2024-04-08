@@ -3,11 +3,9 @@ import functools
 import sys
 from typing import Optional
 
-import redis
 from playwright.async_api import BrowserContext, Page
 from tenacity import RetryError, retry, retry_if_result, stop_after_attempt, wait_fixed
 
-import config
 from base.base_crawler import AbstractLogin
 from tools import utils
 
@@ -87,7 +85,7 @@ class KuaishouLogin(AbstractLogin):
         )
 
         utils.logger.info(
-            f"[KuaishouLogin.login_by_qrcode] waiting for scan code login, remaining time is 20s"
+            "[KuaishouLogin.login_by_qrcode] waiting for scan code login, remaining time is 20s"
         )
         try:
             await self.check_login_state()
@@ -99,7 +97,8 @@ class KuaishouLogin(AbstractLogin):
 
         wait_redirect_seconds = 5
         utils.logger.info(
-            f"[KuaishouLogin.login_by_qrcode] Login successful then wait for {wait_redirect_seconds} seconds redirect ..."
+            f"[KuaishouLogin.login_by_qrcode] Login successful then wait for \
+                {wait_redirect_seconds} seconds redirect ..."
         )
         await asyncio.sleep(wait_redirect_seconds)
 

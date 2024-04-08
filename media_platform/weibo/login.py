@@ -73,7 +73,8 @@ class WeiboLogin(AbstractLogin):
                 f"[WeiboLogin.popup_login_dialog] login dialog box does not pop up automatically, error: {e}"
             )
             utils.logger.info(
-                "[WeiboLogin.popup_login_dialog] login dialog box does not pop up automatically, we will manually click the login button"
+                "[WeiboLogin.popup_login_dialog] login dialog box does not pop up automatically, \
+                    we will manually click the login button"
             )
 
             # 向下滚动1000像素
@@ -89,7 +90,8 @@ class WeiboLogin(AbstractLogin):
                 await asyncio.sleep(0.5)
             except Exception as e:
                 utils.logger.info(
-                    f"[WeiboLogin.popup_login_dialog] manually click the login button faield maybe login dialog Appear：{e}"
+                    f"[WeiboLogin.popup_login_dialog] manually click the login \
+                        button faield maybe login dialog Appear：{e}"
                 )
 
     async def login_by_qrcode(self):
@@ -118,7 +120,7 @@ class WeiboLogin(AbstractLogin):
         )
 
         utils.logger.info(
-            f"[WeiboLogin.login_by_qrcode] Waiting for scan code login, remaining time is 20s"
+            "[WeiboLogin.login_by_qrcode] Waiting for scan code login, remaining time is 20s"
         )
 
         # get not logged session

@@ -86,7 +86,7 @@ class XiaoHongShuLogin(AbstractLogin):
                 timeout=5000,
             )
             await element.click()
-        except Exception as e:
+        except Exception as e:  # noqa
             utils.logger.info(
                 "[XiaoHongShuLogin.login_by_mobile] have not found mobile button icon and keep going ..."
             )
@@ -114,7 +114,8 @@ class XiaoHongShuLogin(AbstractLogin):
         no_logged_in_session = ""
         while max_get_sms_code_time > 0:
             utils.logger.info(
-                f"[XiaoHongShuLogin.login_by_mobile] get sms code from redis remaining time {max_get_sms_code_time}s ..."
+                f"[XiaoHongShuLogin.login_by_mobile] get sms code from redis \
+                    remaining time {max_get_sms_code_time}s ..."
             )
             await asyncio.sleep(1)
             sms_code_key = f"xhs_{self.login_phone}"
@@ -152,7 +153,8 @@ class XiaoHongShuLogin(AbstractLogin):
 
         wait_redirect_seconds = 5
         utils.logger.info(
-            f"[XiaoHongShuLogin.login_by_mobile] Login successful then wait for {wait_redirect_seconds} seconds redirect ..."
+            f"[XiaoHongShuLogin.login_by_mobile] Login successful then wait for \
+                {wait_redirect_seconds} seconds redirect ..."
         )
         await asyncio.sleep(wait_redirect_seconds)
 
@@ -198,7 +200,7 @@ class XiaoHongShuLogin(AbstractLogin):
         )
 
         utils.logger.info(
-            f"[XiaoHongShuLogin.login_by_qrcode] waiting for scan code login, remaining time is 120s"
+            "[XiaoHongShuLogin.login_by_qrcode] waiting for scan code login, remaining time is 120s"
         )
         try:
             await self.check_login_state(no_logged_in_session)
@@ -210,7 +212,8 @@ class XiaoHongShuLogin(AbstractLogin):
 
         wait_redirect_seconds = 5
         utils.logger.info(
-            f"[XiaoHongShuLogin.login_by_qrcode] Login successful then wait for {wait_redirect_seconds} seconds redirect ..."
+            f"[XiaoHongShuLogin.login_by_qrcode] Login successful then wait for \
+                {wait_redirect_seconds} seconds redirect ..."
         )
         await asyncio.sleep(wait_redirect_seconds)
 

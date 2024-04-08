@@ -91,7 +91,7 @@ class BilibiliLogin(AbstractLogin):
         )
 
         utils.logger.info(
-            f"[BilibiliLogin.login_by_qrcode] Waiting for scan code login, remaining time is 20s"
+            "[BilibiliLogin.login_by_qrcode] Waiting for scan code login, remaining time is 20s"
         )
         try:
             await self.check_login_state()
@@ -103,7 +103,8 @@ class BilibiliLogin(AbstractLogin):
 
         wait_redirect_seconds = 5
         utils.logger.info(
-            f"[BilibiliLogin.login_by_qrcode] Login successful then wait for {wait_redirect_seconds} seconds redirect ..."
+            f"[BilibiliLogin.login_by_qrcode] Login successful then wait for \
+                {wait_redirect_seconds} seconds redirect ..."
         )
         await asyncio.sleep(wait_redirect_seconds)
 

@@ -59,7 +59,7 @@ class DouYinLogin(AbstractLogin):
 
         # check login state
         utils.logger.info(
-            f"[DouYinLogin.begin] login finished then check login state ..."
+            "[DouYinLogin.begin] login finished then check login state ..."
         )
         try:
             await self.check_login_state()
@@ -100,7 +100,8 @@ class DouYinLogin(AbstractLogin):
                 f"[DouYinLogin.popup_login_dialog] login dialog box does not pop up automatically, error: {e}"
             )
             utils.logger.info(
-                "[DouYinLogin.popup_login_dialog] login dialog box does not pop up automatically, we will manually click the login button"
+                "[DouYinLogin.popup_login_dialog] login dialog box does not pop up automatically, \
+                    we will manually click the login button"
             )
             login_button_ele = self.context_page.locator("xpath=//p[text() = '登录']")
             await login_button_ele.click()
@@ -151,7 +152,8 @@ class DouYinLogin(AbstractLogin):
         max_get_sms_code_time = 60 * 2  # 最长获取验证码的时间为2分钟
         while max_get_sms_code_time > 0:
             utils.logger.info(
-                f"[DouYinLogin.login_by_mobile] get douyin sms code from redis remaining time {max_get_sms_code_time}s ..."
+                f"[DouYinLogin.login_by_mobile] get douyin sms code from redis \
+                    remaining time {max_get_sms_code_time}s ..."
             )
             await asyncio.sleep(1)
             sms_code_key = f"dy_{self.login_phone}"

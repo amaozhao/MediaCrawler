@@ -28,7 +28,7 @@ class DouYinCrawler(AbstractCrawler):
     browser_context: BrowserContext
 
     def __init__(self) -> None:
-        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"  # fixed
+        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"  # noqa
         self.index_url = "https://www.douyin.com"
 
     def init_config(self, platform: str, login_type: str, crawler_type: str) -> None:
@@ -152,7 +152,7 @@ class DouYinCrawler(AbstractCrawler):
     async def batch_get_note_comments(self, aweme_list: List[str]) -> None:
         if not config.ENABLE_GET_COMMENTS:
             utils.logger.info(
-                f"[DouYinCrawler.batch_get_note_comments] Crawling comment mode is not enabled"
+                "[DouYinCrawler.batch_get_note_comments] Crawling comment mode is not enabled"
             )
             return
 
@@ -176,7 +176,8 @@ class DouYinCrawler(AbstractCrawler):
                     callback=douyin_store.batch_update_dy_aweme_comments,
                 )
                 utils.logger.info(
-                    f"[DouYinCrawler.get_comments] aweme_id: {aweme_id} comments have all been obtained and filtered ..."
+                    f"[DouYinCrawler.get_comments] aweme_id: {aweme_id} \
+                        comments have all been obtained and filtered ..."
                 )
             except DataFetchError as e:
                 utils.logger.error(
@@ -194,7 +195,8 @@ class DouYinCrawler(AbstractCrawler):
             "password": ip_proxy_info.password,
         }
         httpx_proxy = {
-            f"{ip_proxy_info.protocol}": f"http://{ip_proxy_info.user}:{ip_proxy_info.password}@{ip_proxy_info.ip}:{ip_proxy_info.port}"
+            f"{ip_proxy_info.protocol}": f"http://{ip_proxy_info.user}:{ip_proxy_info.password}\
+                @{ip_proxy_info.ip}:{ip_proxy_info.port}"
         }
         return playwright_proxy, httpx_proxy
 

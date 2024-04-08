@@ -7,7 +7,8 @@ import urllib.parse
 
 def sign(a1="", b1="", x_s="", x_t=""):
     """
-    takes in a URI (uniform resource identifier), an optional data dictionary, and an optional ctime parameter. It returns a dictionary containing two keys: "x-s" and "x-t".
+    takes in a URI (uniform resource identifier), an optional data dictionary, and an optional ctime parameter.
+    It returns a dictionary containing two keys: "x-s" and "x-t".
     """
     common = {
         "s0": 5,  # getPlatformCode

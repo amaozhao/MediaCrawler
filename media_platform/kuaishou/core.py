@@ -165,7 +165,7 @@ class KuaishouCrawler(AbstractCrawler):
         """
         if not config.ENABLE_GET_COMMENTS:
             utils.logger.info(
-                f"[KuaishouCrawler.batch_get_note_comments] Crawling comment mode is not enabled"
+                "[KuaishouCrawler.batch_get_note_comments] Crawling comment mode is not enabled"
             )
             return
 
@@ -230,7 +230,8 @@ class KuaishouCrawler(AbstractCrawler):
             "password": ip_proxy_info.password,
         }
         httpx_proxy = {
-            f"{ip_proxy_info.protocol}": f"http://{ip_proxy_info.user}:{ip_proxy_info.password}@{ip_proxy_info.ip}:{ip_proxy_info.port}"
+            f"{ip_proxy_info.protocol}": f"http://{ip_proxy_info.user}:\
+                {ip_proxy_info.password}@{ip_proxy_info.ip}:{ip_proxy_info.port}"
         }
         return playwright_proxy, httpx_proxy
 

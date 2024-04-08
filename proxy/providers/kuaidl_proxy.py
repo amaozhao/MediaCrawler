@@ -4,7 +4,7 @@
 # @Desc    : 快代理HTTP实现，官方文档：https://www.kuaidaili.com/?ref=ldwkjqipvz6c
 from typing import Dict, List
 
-from proxy import IpGetError, IpInfoModel, ProxyProvider, RedisDbIpCache
+from proxy import ProxyProvider
 
 
 class KuaiDaiLiProxy(ProxyProvider):

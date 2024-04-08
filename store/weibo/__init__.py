@@ -3,11 +3,17 @@
 # @Time    : 2024/1/14 21:34
 # @Desc    :
 
-from typing import List
+from typing import Dict, List
 
 import config
 
-from .weibo_store_impl import *
+from .weibo_store_impl import (
+    AbstractStore,
+    WeiboCsvStoreImplement,
+    WeiboDbStoreImplement,
+    WeiboJsonStoreImplement,
+)
+from tools import utils
 
 
 class WeibostoreFactory:
@@ -88,6 +94,7 @@ async def update_weibo_note_comment(note_id: str, comment_item: Dict):
         "avatar": user_info.get("profile_image_url", ""),
     }
     utils.logger.info(
-        f"[store.weibo.update_weibo_note_comment] Weibo note comment: {comment_id}, content: {save_comment_item.get('content', '')[:24]} ..."
+        f"[store.weibo.update_weibo_note_comment] Weibo note comment: {comment_id}, \
+            content: {save_comment_item.get('content', '')[:24]} ..."
     )
     await WeibostoreFactory.create_store().store_comment(comment_item=save_comment_item)

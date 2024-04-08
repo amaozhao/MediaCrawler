@@ -73,7 +73,8 @@ class JiSuHttpProxy(ProxyProvider):
                             ip_item.get("expire")
                         ),
                     )
-                    ip_key = f"JISUHTTP_{ip_info_model.ip}_{ip_info_model.port}_{ip_info_model.user}_{ip_info_model.password}"
+                    ip_key = f"JISUHTTP_{ip_info_model.ip}\
+                        _{ip_info_model.port}_{ip_info_model.user}_{ip_info_model.password}"
                     ip_value = ip_info_model.json()
                     ip_infos.append(ip_info_model)
                     self.ip_cache.set_ip(

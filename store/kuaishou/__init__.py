@@ -2,11 +2,17 @@
 # @Author  : relakkes@gmail.com
 # @Time    : 2024/1/14 20:03
 # @Desc    :
-from typing import List
+from typing import Dict, List
 
 import config
 
-from .kuaishou_store_impl import *
+from .kuaishou_store_impl import (
+    AbstractStore,
+    KuaishouCsvStoreImplement,
+    KuaishouDbStoreImplement,
+    KuaishouJsonStoreImplement,
+)
+from tools import utils
 
 
 class KuaishouStoreFactory:
@@ -80,7 +86,8 @@ async def update_ks_video_comment(video_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
     }
     utils.logger.info(
-        f"[store.kuaishou.update_ks_video_comment] Kuaishou video comment: {comment_id}, content: {save_comment_item.get('content')}"
+        f"[store.kuaishou.update_ks_video_comment] Kuaishou video comment: {comment_id}, \
+            content: {save_comment_item.get('content')}"
     )
     await KuaishouStoreFactory.create_store().store_comment(
         comment_item=save_comment_item

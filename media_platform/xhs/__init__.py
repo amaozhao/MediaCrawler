@@ -1,2 +1,2 @@
-from .core import XiaoHongShuCrawler
-from .field import *
+from .core import XiaoHongShuCrawler  # noqa
+from .field import *  # noqa

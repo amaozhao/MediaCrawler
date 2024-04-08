@@ -3,11 +3,17 @@
 # @Time    : 2024/1/14 19:34
 # @Desc    :
 
-from typing import List
+from typing import Dict, List
 
 import config
 
-from .bilibili_store_impl import *
+from .bilibili_store_impl import (
+    AbstractStore,
+    BiliCsvStoreImplement,
+    BiliDbStoreImplement,
+    BiliJsonStoreImplement,
+)
+from tools import utils
 
 
 class BiliStoreFactory:
@@ -78,6 +84,7 @@ async def update_bilibili_video_comment(video_id: str, comment_item: Dict):
         "last_modify_ts": utils.get_current_timestamp(),
     }
     utils.logger.info(
-        f"[store.bilibili.update_bilibili_video_comment] Bilibili video comment: {comment_id}, content: {save_comment_item.get('content')}"
+        f"[store.bilibili.update_bilibili_video_comment] Bilibili video comment: {comment_id}, \
+            content: {save_comment_item.get('content')}"
     )
     await BiliStoreFactory.create_store().store_comment(comment_item=save_comment_item)

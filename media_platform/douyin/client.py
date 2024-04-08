@@ -1,7 +1,7 @@
 import asyncio
 import copy
 import urllib.parse
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, Optional
 
 import execjs
 import httpx
@@ -11,8 +11,8 @@ from base.base_crawler import AbstactApiClient
 from tools import utils
 from var import request_keyword_var
 
-from .exception import *
-from .field import *
+from .exception import DataFetchError
+from .field import SearchChannelType, SearchSortType, PublishTimeType
 
 
 class DOUYINClient(AbstactApiClient):
@@ -38,7 +38,7 @@ class DOUYINClient(AbstactApiClient):
         if not params:
             return
         headers = headers or self.headers
-        local_storage: Dict = await self.playwright_page.evaluate("() => window.localStorage")  # type: ignore
+        # local_storage: Dict = await self.playwright_page.evaluate("() => window.localStorage")  # type: ignore
         douyin_js_obj = execjs.compile(open("libs/douyin.js").read())
         common_params = {
             "device_platform": "webapp",
@@ -59,7 +59,6 @@ class DOUYINClient(AbstactApiClient):
             "screen_height": "1200",
             # " webid": douyin_js_obj.call("get_web_id"),
             # "msToken": local_storage.get("xmst"),
-            # "msToken": "abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK",
         }
         params.update(common_params)
         query = "&".join([f"{k}={v}" for k, v in params.items()])
@@ -116,7 +115,7 @@ class DOUYINClient(AbstactApiClient):
         :param offset:
         :param search_channel:
         :param sort_type:
-        :param publish_time: ·
+        :param publish_time:
         :return:
         """
         params = {

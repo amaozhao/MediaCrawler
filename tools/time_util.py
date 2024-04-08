@@ -63,9 +63,8 @@ def get_unix_time_from_time_str(time_str):
         format_str = "%Y-%m-%d %H:%M:%S"
         tm_object = time.strptime(str(time_str), format_str)
         return int(time.mktime(tm_object))
-    except Exception as e:
+    except Exception as e:  # noqa
         return 0
-    pass
 
 
 def get_unix_timestamp():

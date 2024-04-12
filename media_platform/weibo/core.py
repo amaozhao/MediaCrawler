@@ -232,7 +232,9 @@ class WeiboCrawler(AbstractCrawler):
         :return:
         """
         if not config.ENABLE_GET_IMAGES:
-            utils.logger.info("[WeiboCrawler.get_note_images] Crawling image mode is not enabled")
+            utils.logger.info(
+                "[WeiboCrawler.get_note_images] Crawling image mode is not enabled"
+            )
             return
 
         pics: Dict = mblog.get("pics")
@@ -245,7 +247,9 @@ class WeiboCrawler(AbstractCrawler):
             content = await self.wb_client.get_note_image(url)
             if content is not None:
                 extension_file_name = url.split(".")[-1]
-                await weibo_store.update_weibo_note_image(pic["pid"], content, extension_file_name)
+                await weibo_store.update_weibo_note_image(
+                    pic["pid"], content, extension_file_name
+                )
 
     async def create_weibo_client(self, httpx_proxy: Optional[str]) -> WeiboClient:
         """Create xhs client"""

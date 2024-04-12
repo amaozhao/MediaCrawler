@@ -1,8 +1,8 @@
 import logging
 
-from .crawler_util import *     # noqa
-from .slider_util import *      # noqa
-from .time_util import *        # noqa
+from .crawler_util import *  # noqa
+from .slider_util import *  # noqa
+from .time_util import *  # noqa
 
 
 def init_loging_config():

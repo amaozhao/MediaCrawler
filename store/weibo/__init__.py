@@ -12,7 +12,7 @@ from .weibo_store_impl import (
     WeiboCsvStoreImplement,
     WeiboDbStoreImplement,
     WeiboJsonStoreImplement,
-    WeiboStoreImage
+    WeiboStoreImage,
 )
 from tools import utils
 
@@ -106,6 +106,6 @@ async def update_weibo_note_image(picid: str, pic_content, extension_file_name):
         {
             "pic_id": picid,
             "pic_content": pic_content,
-            "extension_file_name": extension_file_name
+            "extension_file_name": extension_file_name,
         }
     )

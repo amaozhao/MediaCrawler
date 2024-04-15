@@ -55,6 +55,18 @@ async def main():
         choices=["search", "detail", "creator"],
         default=config.CRAWLER_TYPE,
     )
+    parser.add_argument(
+        "--start",
+        type=int,
+        help="crawler type (number of start page)",
+        default=config.START_PAGE,
+    )
+    parser.add_argument(
+        "--keywords",
+        type=str,
+        help="crawler type (please input keywords)",
+        default=config.KEYWORDS,
+    )
 
     # init db
     if config.SAVE_DATA_OPTION == "db":
@@ -63,7 +75,11 @@ async def main():
     args = parser.parse_args()
     crawler = CrawlerFactory.create_crawler(platform=args.platform)
     crawler.init_config(
-        platform=args.platform, login_type=args.lt, crawler_type=args.type
+        platform=args.platform,
+        login_type=args.lt,
+        crawler_type=args.type,
+        start_page=args.start,
+        keyword=args.keywords,
     )
     await crawler.start()
 

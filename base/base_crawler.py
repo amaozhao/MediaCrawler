@@ -6,7 +6,14 @@ from playwright.async_api import BrowserContext, BrowserType
 
 class AbstractCrawler(ABC):
     @abstractmethod
-    def init_config(self, platform: str, login_type: str, crawler_type: str):
+    def init_config(
+        self,
+        platform: str,
+        login_type: str,
+        crawler_type: str,
+        start_page: int,
+        keyword: str,
+    ):
         pass
 
     @abstractmethod
@@ -70,7 +77,7 @@ class AbstractStoreImage(ABC):
         pass
 
 
-class AbstactApiClient(ABC):
+class AbstractApiClient(ABC):
     @abstractmethod
     async def request(self, method, url, **kwargs):
         pass

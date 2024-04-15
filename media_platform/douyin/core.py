@@ -31,7 +31,14 @@ class DouYinCrawler(AbstractCrawler):
         self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"  # noqa
         self.index_url = "https://www.douyin.com"
 
-    def init_config(self, platform: str, login_type: str, crawler_type: str, start_page: int, keyword: str) -> None:
+    def init_config(
+        self,
+        platform: str,
+        login_type: str,
+        crawler_type: str,
+        start_page: int,
+        keyword: str,
+    ) -> None:
         self.platform = platform
         self.login_type = login_type
         self.crawler_type = crawler_type
@@ -93,7 +100,9 @@ class DouYinCrawler(AbstractCrawler):
             utils.logger.info(f"[DouYinCrawler.search] Current keyword: {keyword}")
             aweme_list: List[str] = []
             page = 0
-            while (page - start_page + 1) * dy_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
+            while (
+                page - start_page + 1
+            ) * dy_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
                 if page < start_page:
                     utils.logger.info(f"[DouYinCrawler.search] Skip {page}")
                     page += 1

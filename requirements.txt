@@ -1,11 +1,12 @@
-Pillow
-PyExecJS
 aiofiles
 aiomysql
 httpx
 opencv-python
+Pillow
 playwright
 pydantic
+PyExecJS
 redis
 tenacity
-tornado
+fastapi
+uvicorn
